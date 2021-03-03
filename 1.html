@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body> 
+    <div class="container">
+        <button id="btn1">Botão 1</button>
+        <button id="btn2">Botão 2</button>
+        <button id="btn3">Botão 3</button>
+    </div>
+    <hr>
+    <h1>Delegação de Eventos</h1>
+    <div class="container2">
+        <button>Botão4</button>
+        <button>Botão5</button>
+        <button>Botão6</button>
+    </div>
+    <script> //const btn = document.getElementById("btn1")//btn.addEventListener(evento, função, fase)
+//Utilizando Dom Level 0, não consigo ter 2 funções atreladas no elemento Html
+        const btn1 = document.getElementById("btn1")
+        const btn2 = document.getElementById("btn2")
+        const btn3 = document.getElementById("btn3")
+
+        function clicou() {
+            console.log("click função Anonima")
+        }
+        btn1.onclick = function() {
+            console.log("click btn1 função")
+        }
+        btn1.onclick = clicou //Dom Level 0
+
+        //btn2.addEventListener("click", clicou)
+        btn2.addEventListener("click", function() {
+            console.log("click btn2 função anonima")
+        })
+
+        btn2.onclick = function() {
+            console.log(" Btn2 recebendo função anonima")
+        }
+        
+        /*document.addEventListener("click", function() {
+            console.log("Clickou no Document.addEventListener")
+        }, false)//como está sendo acessado pelo document, ele sempre será exibido por ultimo, já que o padrão é o borbulhamento
+        //que começa de baixo para cima*/
+
+        btn3.addEventListener("click", function(evento) {
+            console.log(evento)
+            evento.stopPropagation()// não vai disparar os demais eventos
+            console.log("btn3 Clicado Corretamente, function com parametro evento")
+        }, false) //default, padrão, o evento vai ser disparado pará cima, até chegar no Document
+        //Fase de Captura - True
+        //Fase Borbulhamento - False
+
+        const container = document.querySelector(".container")
+        container.addEventListener("click", function () {
+            console.log("Clicou no Container")
+        }, true)
+
+        const container2 = document.querySelector(".container2")
+        const btns = document.querySelectorAll(".container2 button")
+        console.log(btns)
+        [...btns].forEach( btn => {
+            btn.addEventListener("click", function (e) {
+                e.stopPropagation()
+                console.log(e.target)    
+            })
+        } )
+
+
+    </script>
+
+</body>
+</html>
